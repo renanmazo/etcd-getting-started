@@ -1,0 +1,28 @@
+version: "2"
+services:
+  application:
+    build:
+      context: ./application
+      dockerfile: Dockerfile
+    networks:
+      default:
+        ipv4_address: 172.16.1.3
+    depends_on:
+      - etcd
+  etcd:
+    image: bitnami/etcd
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+    ports:
+      - "2379:2379"
+      - "2380:2380"
+    networks:
+      default:
+        ipv4_address: 172.16.1.2
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.1.0/24
